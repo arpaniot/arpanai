@@ -6,7 +6,7 @@ import io
 # 1. Page Configuration & Futuristic UI Architecture
 st.set_page_config(page_title="⚡ ARPAN AI MATRIX", page_icon="🔮", layout="centered")
 
-# Set up your secret Master Passcode here!
+# Master Passcode Configuration
 MASTER_PREMIUM_CODE = "IOT_ARPAN_2026"
 
 # Advanced Responsive CSS for Cyberpunk / Premium Mobile Layout
@@ -127,93 +127,4 @@ else:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "premium_unlocked" not in st.session_state:
-    st.session_state.premium_unlocked = False
-
-# UI Title Framework
-st.markdown("<div class='neon-bar'></div>", unsafe_allow_html=True)
-
-# 4. Premium Code Authorization Panel (Collapsible to keep phone screen clean)
-with st.expander("🔑 ENTER APEX PREMIUM ACCESS CODE", expanded=not st.session_state.premium_unlocked):
-    input_code = st.text_input("Enter code to unlock Multimodal/Image protocols:", type="password", placeholder="••••••••")
-    if input_code:
-        if input_code == MASTER_PREMIUM_CODE:
-            st.session_state.premium_unlocked = True
-            st.success("⚡ CORE UPGRADED: Premium Multimodal features unlocked successfully!")
-            st.toast("Access Granted. Vision engine online.", icon="🔓")
-        else:
-            st.session_state.premium_unlocked = False
-            st.sidebar.error("ACCESS DENIED: Invalid Authentication Token.")
-
-# Header Status Generation
-if st.session_state.premium_unlocked:
-    st.markdown("<span class='status-badge-unlocked'>👑 MULTIMODAL MODE</span>", unsafe_allow_html=True)
-else:
-    st.markdown("<span class='status-badge-locked'>🔒 STANDARD TEXT MODE</span>", unsafe_allow_html=True)
-
-st.markdown("<h1 style='margin-top:0px; margin-bottom:0px; color:#ffffff; font-weight:800;'>🔮 ARPAN AI <span style='color:#00ffcc;'>PRO</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color:#475569; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;'>QUANTUM INTERFACE // OS EDITION v3.0</p>", unsafe_allow_html=True)
-st.write("---")
-
-# 5. Live Streamlit Feed
-st.markdown("<div class='chat-wrapper'>", unsafe_allow_html=True)
-for msg in st.session_state.messages:
-    if msg["role"] == "user":
-        st.markdown(f"<div class='user-bubble'><span class='sender-label user-label'>▲ SECURE USER</span>{msg['text']}</div>", unsafe_allow_html=True)
-        if msg.get("image"):
-            st.image(msg["image"], use_container_width=True)
-    else:
-        st.markdown(f"<div class='ai-bubble'><span class='sender-label ai-label'>◆ ARPAN CORE</span>{msg['text']}</div>", unsafe_allow_html=True)
-st.markdown("</div>", unsafe_allow_html=True)
-
-# 6. Dynamic Main Console (Changes layouts automatically based on authorization state!)
-with st.form(key="chat_form", clear_on_submit=True):
-    user_text = st.text_input("Transmit message stream...", placeholder="Ask something brilliant...", key="input_field")
     
-    # The magical gatekeeper logic: Only renders if passcode verified!
-    user_image = None
-    if st.session_state.premium_unlocked:
-        st.markdown("<p style='color:#00ffcc; font-size:0.75rem; font-weight:600; margin-top:10px; margin-bottom:-5px;'>✨ PREMIUM VISUAL VECTOR MODULE ACTIVE:</p>", unsafe_allow_html=True)
-        user_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
-    else:
-        st.markdown("<p style='color:#64748B; font-size:0.7rem; font-style:italic; text-align:center; margin-top:10px;'>Unlock Premium mode above to submit images to the AI.</p>", unsafe_allow_html=True)
-        
-    submit_button = st.form_submit_button(label="EXECUTE TRANS-CODELINK")
-
-# 7. Heavy Computational Request Handlers
-if submit_button and (user_text or user_image):
-    current_msg = {"role": "user", "text": user_text, "image": None}
-    
-    if user_image is not None:
-        img_bytes = user_image.read()
-        img_obj = Image.open(io.BytesIO(img_bytes))
-        current_msg["image"] = img_obj
-        
-    st.session_state.messages.append(current_msg)
-    st.rerun()
-
-# Processing Threading Logic
-if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
-    last_msg = st.session_state.messages[-1]
-    
-    with st.spinner("Compiling matrix matrices..."):
-        try:
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            contents = []
-            
-            if last_msg["text"]:
-                contents.append(last_msg["text"])
-            if last_msg["image"]:
-                contents.append(last_msg["image"])
-                
-            if not last_msg["text"] and last_msg["image"]:
-                contents.append("Analyze and map out this visual matrix completely.")
-
-            response = model.generate_content(contents)
-            ai_text = response.text
-            
-        except Exception as e:
-            ai_text = f"CRITICAL CONSOLE ERROR: {str(e)}"
-            
-    st.session_state.messages.append({"role": "model", "text": ai_text})
-    st.rerun()
-            
