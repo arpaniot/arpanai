@@ -38,7 +38,7 @@ st.markdown("""
         background-color: #161A24 !important;
     }
     </style>
-""", unsafe_allowed_html=True)
+""", unsafe_allow_html=True)
 
 # 2. Secure API Key Setup (Configured in Streamlit Secrets later)
 if "GEMINI_API_KEY" in st.secrets:
