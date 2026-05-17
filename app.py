@@ -133,7 +133,7 @@ if "premium_unlocked" not in st.session_state:
 st.markdown("<div class='neon-bar'></div>", unsafe_allow_html=True)
 
 # 4. Premium Code Authorization Panel
-with st.expander("🔑 ENTER APEX PREMIUM ACCESS CODE", expanded=not st.session_state.premium_unlocked):
+with st.expander("🔑 ENTER PREMIUM ACCESS CODE(Get from Arpan)", expanded=not st.session_state.premium_unlocked):
     input_code = st.text_input("Enter code to unlock Multimodal/Matrix protocols:", type="password", placeholder="••••••••")
     if input_code:
         if input_code == MASTER_PREMIUM_CODE:
