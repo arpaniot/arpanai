@@ -3,129 +3,158 @@ import google.generativeai as genai
 from PIL import Image
 import io
 
-# 1. Page Configuration & Cyberpunk Header Injection
-st.set_page_config(page_title="⚡ ARPAN AI PRO", page_icon="🔮", layout="centered")
+# 1. Page Configuration & Futuristic UI Architecture
+st.set_page_config(page_title="⚡ ARPAN AI MATRIX", page_icon="🔮", layout="centered")
 
-# Advanced Responsive CSS for Premium Mobile UI
+# Set up your secret Master Passcode here!
+MASTER_PREMIUM_CODE = "IOT_ARPAN_2026"
+
+# Advanced Responsive CSS for Cyberpunk / Premium Mobile Layout
 st.markdown("""
     <style>
-    /* Dark Sci-Fi Background */
+    /* Dark Sci-Fi Canvas Background */
     .stApp {
-        background-color: #060814;
-        background-image: radial-gradient(circle at 50% 0%, #1a103c 0%, #060814 70%);
+        background-color: #05070F;
+        background-image: radial-gradient(circle at 50% 10%, #150F30 0%, #05070F 80%);
         color: #E2E8F0;
         font-family: 'Inter', system-ui, -apple-system, sans-serif;
     }
     
-    /* Top Neon Laser Line */
+    /* Dynamic Glowing Top Beam */
     .neon-bar {
         height: 4px;
-        background: linear-gradient(90deg, #00f2fe 0%, #4facfe 50%, #00ffcc 100%);
-        box-shadow: 0 0 15px #00f2fe, 0 0 25px #00ffcc;
+        background: linear-gradient(90deg, #00f2fe 0%, #7928ca 50%, #00ffcc 100%);
+        box-shadow: 0 0 20px #00f2fe, 0 0 30px #7928ca;
         border-radius: 10px;
         margin-bottom: 25px;
     }
 
-    /* Glassmorphism Container for Chat */
-    .chat-wrapper {
-        padding: 5px;
-        width: 100%;
+    /* System Status Badges */
+    .status-badge-locked {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid #ef4444;
+        color: #f87171;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        float: right;
+    }
+    .status-badge-unlocked {
+        background: rgba(0, 255, 204, 0.1);
+        border: 1px solid #00ffcc;
+        color: #00ffcc;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        float: right;
+        box-shadow: 0 0 10px rgba(0, 255, 204, 0.2);
     }
 
-    /* User Chat Bubble: Deep Space Blue */
+    /* Chat Elements with Frosted Glassmorphism */
     .user-bubble {
-        background: rgba(30, 41, 59, 0.4);
+        background: rgba(30, 41, 59, 0.45);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         padding: 14px 18px;
         border-radius: 20px 20px 4px 20px;
         margin-bottom: 16px;
         max-width: 88%;
         margin-left: auto;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        animation: fadeIn 0.3s ease-in-out;
     }
 
-    /* AI Chat Bubble: Glowing Cyan Matrix */
     .ai-bubble {
-        background: rgba(0, 255, 204, 0.03);
+        background: rgba(0, 255, 204, 0.02);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 255, 204, 0.25);
+        border: 1px solid rgba(0, 255, 204, 0.22);
         padding: 14px 18px;
         border-radius: 20px 20px 20px 4px;
         margin-bottom: 20px;
         max-width: 88%;
         margin-right: auto;
-        box-shadow: 0 4px 20px rgba(0, 255, 204, 0.05), inset 0 0 10px rgba(0, 255, 204, 0.02);
-        animation: fadeIn 0.3s ease-in-out;
+        box-shadow: 0 4px 20px rgba(0, 255, 204, 0.04);
     }
     
     .sender-label {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 1.5px;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         display: block;
     }
-    
     .user-label { color: #38bdf8; font-weight: 600; }
-    .ai-label { color: #00ffcc; font-weight: 700; text-shadow: 0 0 8px rgba(0, 255, 204, 0.4); }
+    .ai-label { color: #00ffcc; font-weight: 700; text-shadow: 0 0 8px rgba(0, 255, 204, 0.3); }
 
-    /* Premium High-Tech Bottom Input Form */
+    /* Core Control Panels */
     div[data-testid="stForm"] {
-        border: 1px solid rgba(0, 242, 254, 0.25) !important;
-        border-radius: 22px !important;
-        background: rgba(15, 23, 42, 0.8) !important;
-        backdrop-filter: blur(10px) !important;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
-        padding: 15px !important;
-        margin-top: 20px;
+        border: 1px solid rgba(121, 40, 202, 0.3) !important;
+        border-radius: 24px !important;
+        background: rgba(10, 15, 30, 0.85) !important;
+        backdrop-filter: blur(12px) !important;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
+        padding: 18px !important;
     }
     
-    /* Submit Button Neon Glow styling */
+    /* Cyberpunk Interactive Button */
     button[data-testid="stFormSubmitButton"] {
-        background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%) !important;
-        color: #060814 !important;
+        background: linear-gradient(90deg, #7928ca 0%, #00f2fe 100%) !important;
+        color: #ffffff !important;
         font-weight: 700 !important;
+        letter-spacing: 1px !important;
         border: none !important;
-        border-radius: 12px !important;
+        border-radius: 14px !important;
         width: 100% !important;
-        box-shadow: 0 0 12px rgba(0, 242, 254, 0.4) !important;
-        transition: all 0.2s ease !important;
-    }
-    
-    button[data-testid="stFormSubmitButton"]:hover {
-        box-shadow: 0 0 20px rgba(0, 242, 254, 0.7) !important;
-        transform: scale(1.02);
-    }
-
-    /* Animation */
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
+        box-shadow: 0 0 15px rgba(121, 40, 202, 0.4) !important;
+        height: 45px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# 2. Secure API Key Setup from Streamlit Secrets
+# 2. API Key Deployment Configuration
 if "GEMINI_API_KEY" in st.secrets:
     genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-    st.error("Missing API Key! Please configure your GEMINI_API_KEY in the Streamlit Secrets manager.")
+    st.error("SYSTEM CRISIS: API Key is unconfigured in Secrets.")
     st.stop()
 
-# 3. Private Session State Handling
+# 3. Persistent State Architectures
 if "messages" not in st.session_state:
     st.session_state.messages = []
+if "premium_unlocked" not in st.session_state:
+    st.session_state.premium_unlocked = False
 
-# Glowing Header Layout
+# UI Title Framework
 st.markdown("<div class='neon-bar'></div>", unsafe_allow_html=True)
-st.markdown("<h1 style='text-align: center; margin-bottom: 0px; color:#ffffff; font-weight:800; letter-spacing: 1px;'>🔮 ARPAN AI <span style='color:#00ffcc;'>PRO</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color:#64748B; font-size:0.85rem; margin-bottom: 25px;'>QUANTUM INTERFACE // CORE V2.5 FLASH</p>", unsafe_allow_html=True)
 
-# 4. Render Chat History inside responsive layout
+# 4. Premium Code Authorization Panel (Collapsible to keep phone screen clean)
+with st.expander("🔑 ENTER APEX PREMIUM ACCESS CODE", expanded=not st.session_state.premium_unlocked):
+    input_code = st.text_input("Enter code to unlock Multimodal/Image protocols:", type="password", placeholder="••••••••")
+    if input_code:
+        if input_code == MASTER_PREMIUM_CODE:
+            st.session_state.premium_unlocked = True
+            st.success("⚡ CORE UPGRADED: Premium Multimodal features unlocked successfully!")
+            st.toast("Access Granted. Vision engine online.", icon="🔓")
+        else:
+            st.session_state.premium_unlocked = False
+            st.sidebar.error("ACCESS DENIED: Invalid Authentication Token.")
+
+# Header Status Generation
+if st.session_state.premium_unlocked:
+    st.markdown("<span class='status-badge-unlocked'>👑 MULTIMODAL MODE</span>", unsafe_allow_html=True)
+else:
+    st.markdown("<span class='status-badge-locked'>🔒 STANDARD TEXT MODE</span>", unsafe_allow_html=True)
+
+st.markdown("<h1 style='margin-top:0px; margin-bottom:0px; color:#ffffff; font-weight:800;'>🔮 ARPAN AI <span style='color:#00ffcc;'>PRO</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#475569; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;'>QUANTUM INTERFACE // OS EDITION v3.0</p>", unsafe_allow_html=True)
+st.write("---")
+
+# 5. Live Streamlit Feed
 st.markdown("<div class='chat-wrapper'>", unsafe_allow_html=True)
 for msg in st.session_state.messages:
     if msg["role"] == "user":
@@ -136,13 +165,21 @@ for msg in st.session_state.messages:
         st.markdown(f"<div class='ai-bubble'><span class='sender-label ai-label'>◆ ARPAN CORE</span>{msg['text']}</div>", unsafe_allow_html=True)
 st.markdown("</div>", unsafe_allow_html=True)
 
-# 5. Mobile-Optimized Input System at the Bottom
+# 6. Dynamic Main Console (Changes layouts automatically based on authorization state!)
 with st.form(key="chat_form", clear_on_submit=True):
-    user_text = st.text_input("Execute prompt...", placeholder="Ask something brilliant...", key="input_field")
-    user_image = st.file_uploader("Inject Visual Data (Optional)", type=["jpg", "jpeg", "png"])
-    submit_button = st.form_submit_button(label="INITIALIZE RESPONSE")
+    user_text = st.text_input("Transmit message stream...", placeholder="Ask something brilliant...", key="input_field")
+    
+    # The magical gatekeeper logic: Only renders if passcode verified!
+    user_image = None
+    if st.session_state.premium_unlocked:
+        st.markdown("<p style='color:#00ffcc; font-size:0.75rem; font-weight:600; margin-top:10px; margin-bottom:-5px;'>✨ PREMIUM VISUAL VECTOR MODULE ACTIVE:</p>", unsafe_allow_html=True)
+        user_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
+    else:
+        st.markdown("<p style='color:#64748B; font-size:0.7rem; font-style:italic; text-align:center; margin-top:10px;'>Unlock Premium mode above to submit images to the AI.</p>", unsafe_allow_html=True)
+        
+    submit_button = st.form_submit_button(label="EXECUTE TRANS-CODELINK")
 
-# 6. Run Multimodal API request upon clicking send
+# 7. Heavy Computational Request Handlers
 if submit_button and (user_text or user_image):
     current_msg = {"role": "user", "text": user_text, "image": None}
     
@@ -154,11 +191,11 @@ if submit_button and (user_text or user_image):
     st.session_state.messages.append(current_msg)
     st.rerun()
 
-# Generate response if the last turn belongs to the user
+# Processing Threading Logic
 if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
     last_msg = st.session_state.messages[-1]
     
-    with st.spinner("Decoding quantum vectors..."):
+    with st.spinner("Compiling matrix matrices..."):
         try:
             model = genai.GenerativeModel("gemini-2.5-flash")
             contents = []
@@ -175,8 +212,8 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
             ai_text = response.text
             
         except Exception as e:
-            ai_text = f"SYSTEM ERROR: Failed to process request vector. Details: {str(e)}"
+            ai_text = f"CRITICAL CONSOLE ERROR: {str(e)}"
             
     st.session_state.messages.append({"role": "model", "text": ai_text})
     st.rerun()
-    
+            
