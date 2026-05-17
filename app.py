@@ -185,7 +185,7 @@ with st.form(key="chat_form", clear_on_submit=True):
         st.markdown("<p style='color:#7928ca; font-size:0.75rem; font-weight:600; margin-top:5px; margin-bottom: -5px;'>📸 INJECT VISUAL DATA STREAM:</p>", unsafe_allow_html=True)
         user_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
     else:
-        st.markdown("<p style='color:#64748B; font-size:0.7rem; font-style:italic; text-align:center; margin-top:10px;'>Unlock Premium mode above to activate the 3-Dot Engine Selector & Vision Vectoring.</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#64748B; font-size:0.7rem; font-style:italic; text-align:center; margin-top:10px;'>Unlock Premium mode above to activate the 3 Different Engine Selector & Vision Vectoring.</p>", unsafe_allow_html=True)
         
     submit_button = st.form_submit_button(label="EXECUTE TRANS-CODELINK")
 
