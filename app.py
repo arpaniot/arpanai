@@ -193,7 +193,7 @@ with st.sidebar:
 st.markdown("<div class='neon-bar'></div>", unsafe_allow_html=True)
 
 # 5. Premium Code Authorization Panel
-with st.expander("🔑 ENTER APEX PREMIUM ACCESS CODE(Get from Arpan)", expanded=not st.session_state.premium_unlocked):
+with st.expander("🔑 ENTER PREMIUM ACCESS CODE(Get from Arpan)", expanded=not st.session_state.premium_unlocked):
     input_code = st.text_input("Enter code to unlock Multimodal/Matrix protocols:", type="password", placeholder="••••••••")
     if input_code:
         if input_code == MASTER_PREMIUM_CODE:
@@ -210,8 +210,8 @@ if st.session_state.premium_unlocked:
 else:
     st.markdown("<span class='status-badge-locked'>🔒 STANDARD TEXT MODE</span>", unsafe_allow_html=True)
 
-st.markdown("<h1 style='margin-top:0px; margin-bottom:0px; color:#ffffff; font-weight:800;'>🔮 ARPAN AI <span style='color:#00ffcc;'>OMNI</span></h1>", unsafe_allow_html=True)
-st.markdown("<p style='color:#475569; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;'>QUANTUM INTERFACE // PERSISTENT OMNI-CORE v4.0</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='margin-top:0px; margin-bottom:0px; color:#ffffff; font-weight:800;'>🔮 ARPAN AI <span style='color:#00ffcc;'>PRO</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#475569; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;'>QUANTUM INTERFACE // PERSISTENT CORE v4.0</p>", unsafe_allow_html=True)
 st.write("---")
 
 st.caption("💡 Click the small arrow icon ( ＞ ) at the top-left of your phone screen to toggle your sliding History Panel.")
