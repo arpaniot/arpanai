@@ -127,4 +127,124 @@ else:
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "premium_unlocked" not in st.session_state:
+    st.session_state.premium_unlocked = False
+
+# UI Title Framework
+st.markdown("<div class='neon-bar'></div>", unsafe_allow_html=True)
+
+# 4. Premium Code Authorization Panel
+with st.expander("🔑 ENTER APEX PREMIUM ACCESS CODE", expanded=not st.session_state.premium_unlocked):
+    input_code = st.text_input("Enter code to unlock Multimodal/Matrix protocols:", type="password", placeholder="••••••••")
+    if input_code:
+        if input_code == MASTER_PREMIUM_CODE:
+            st.session_state.premium_unlocked = True
+            st.success("⚡ CORE UPGRADED: Premium Multimodal & Variant Engine unlocked!")
+            st.toast("Access Granted. All systems online.", icon="🔓")
+        else:
+            st.session_state.premium_unlocked = False
+            st.sidebar.error("ACCESS DENIED: Invalid Authentication Token.")
+
+# Header Status Generation
+if st.session_state.premium_unlocked:
+    st.markdown("<span class='status-badge-unlocked'>👑 APEX VIP ACTIVE</span>", unsafe_allow_html=True)
+else:
+    st.markdown("<span class='status-badge-locked'>🔒 STANDARD TEXT MODE</span>", unsafe_allow_html=True)
+
+st.markdown("<h1 style='margin-top:0px; margin-bottom:0px; color:#ffffff; font-weight:800;'>🔮 ARPAN AI <span style='color:#00ffcc;'>PRO</span></h1>", unsafe_allow_html=True)
+st.markdown("<p style='color:#475569; font-size:0.8rem; letter-spacing:1px; margin-bottom:20px;'>QUANTUM INTERFACE // CORE V3.5 MULTI-MATRIX</p>", unsafe_allow_html=True)
+st.write("---")
+
+# 5. Live Streamlit Chat Feed
+st.markdown("<div class='chat-wrapper'>", unsafe_allow_html=True)
+for msg in st.session_state.messages:
+    if msg["role"] == "user":
+        st.markdown(f"<div class='user-bubble'><span class='sender-label user-label'>▲ SECURE USER</span>{msg['text']}</div>", unsafe_allow_html=True)
+        if msg.get("image"):
+            st.image(msg["image"], use_container_width=True)
+    else:
+        st.markdown(f"<div class='ai-bubble'><span class='sender-label ai-label'>◆ {msg['core_label']}</span>{msg['text']}</div>", unsafe_allow_html=True)
+st.markdown("</div>", unsafe_allow_html=True)
+
+# 6. Dynamic Main Console
+with st.form(key="chat_form", clear_on_submit=True):
+    user_text = st.text_input("Transmit message stream...", placeholder="Ask something brilliant...", key="input_field")
     
+    # The magical gatekeeper logic: Unlocks completely when passcode verified
+    user_image = None
+    ai_mode = "Standard Assistant" # Default
+    
+    if st.session_state.premium_unlocked:
+        st.markdown("<p style='color:#00ffcc; font-size:0.75rem; font-weight:600; margin-top:10px; margin-bottom: 2px;'>✨ PREMIUM CORE VECTOR MATRIX ACTIVE:</p>", unsafe_allow_html=True)
+        
+        # 3-Dot Dropdown box simulation for system settings
+        ai_mode = st.selectbox(
+            "Select AI Processing Core Matrix (⋮)", 
+            ["Jarvis Matrix Protocols", "Savage Core (Extreme Roast Mode)", "Standard AI Engine"]
+        )
+        
+        st.markdown("<p style='color:#7928ca; font-size:0.75rem; font-weight:600; margin-top:5px; margin-bottom: -5px;'>📸 INJECT VISUAL DATA STREAM:</p>", unsafe_allow_html=True)
+        user_image = st.file_uploader("", type=["jpg", "jpeg", "png"])
+    else:
+        st.markdown("<p style='color:#64748B; font-size:0.7rem; font-style:italic; text-align:center; margin-top:10px;'>Unlock Premium mode above to activate the 3-Dot Engine Selector & Vision Vectoring.</p>", unsafe_allow_html=True)
+        
+    submit_button = st.form_submit_button(label="EXECUTE TRANS-CODELINK")
+
+# 7. Heavy Computational Request Handlers
+if submit_button and (user_text or user_image):
+    current_msg = {"role": "user", "text": user_text, "image": None}
+    
+    if user_image is not None:
+        img_bytes = user_image.read()
+        img_obj = Image.open(io.BytesIO(img_bytes))
+        current_msg["image"] = img_obj
+        
+    st.session_state.messages.append(current_msg)
+    
+    # Store the selected AI core mode into session state so processing script remembers it
+    st.session_state.active_core = ai_mode
+    st.rerun()
+
+# Processing Engine Threads
+if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
+    last_msg = st.session_state.messages[-1]
+    
+    # Read active processing persona or fallback to Standard
+    chosen_engine = st.session_state.get("active_core", "Standard AI Engine")
+    
+    with st.spinner("Compiling structural vectors..."):
+        try:
+            model = genai.GenerativeModel("gemini-2.5-flash")
+            contents = []
+            
+            # System Persona Injection based on chosen core switch
+            if chosen_engine == "Jarvis Matrix Protocols":
+                display_label = "JARVIS PROTOCOL"
+                persona_prompt = "You are JARVIS, an ultra-advanced, brilliant, polite AI assistant. Address the user respectfully as Sir. Keep responses highly technical, efficient, and sophisticated."
+            elif chosen_engine == "Savage Core (Extreme Roast Mode)":
+                display_label = "SAVAGE ROAST CORE"
+                persona_prompt = "You are a savage, highly sarcastic, funny AI. Roast the user's prompt heavily with absolute wits, dark humor, and playful mockery. Do not be generic."
+            else:
+                display_label = "ARPAN CORE"
+                persona_prompt = "You are a premium, highly responsive AI assistant built for Arpan's engineering project."
+            
+            # Append prompt instructions first to force persona behavior
+            contents.append(persona_prompt)
+
+            if last_msg["text"]:
+                contents.append(last_msg["text"])
+            if last_msg["image"]:
+                contents.append(last_msg["image"])
+                
+            if not last_msg["text"] and last_msg["image"]:
+                contents.append("Analyze and map out this visual matrix completely based on your current persona configuration.")
+
+            response = model.generate_content(contents)
+            ai_text = response.text
+            
+        except Exception as e:
+            ai_text = f"CRITICAL CONSOLE ERROR: {str(e)}"
+            display_label = "ERROR VECTOR"
+            
+    st.session_state.messages.append({"role": "model", "text": ai_text, "core_label": display_label})
+    st.rerun()
+            
