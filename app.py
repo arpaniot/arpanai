@@ -154,7 +154,7 @@ if "messages" not in st.session_state:
 if "premium_unlocked" not in st.session_state:
     st.session_state.premium_unlocked = False
 
-# 4. SIDEBAR CHAT MATRIX (Left sliding panel like ChatGPT/Gemini)
+# 4. SIDEBAR CHAT MATRIX
 with st.sidebar:
     st.markdown("<h3 style='color:#00ffcc; font-weight:800; letter-spacing:1px; margin-bottom:5px;'>🔮 TIME MATRIX</h3>", unsafe_allow_html=True)
     st.markdown("<p style='color:#475569; font-size:0.75rem; margin-bottom:20px;'>CHRONOLOGICAL PROMPT VECTORS</p>", unsafe_allow_html=True)
@@ -301,4 +301,3 @@ if st.session_state.messages and st.session_state.messages[-1]["role"] == "user"
             
     st.session_state.messages.append({"role": "model", "text": ai_text, "core_label": display_label})
     st.rerun()
-                
